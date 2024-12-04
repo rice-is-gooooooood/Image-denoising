@@ -1,0 +1,15 @@
+% 读取图像
+img = imread('C:\Users\Lenovo\Desktop\原图.jpg');
+
+% 显示原始图像
+figure;
+imshow(img);
+title('Original Image');
+
+% 向图像添加高斯噪声（均值0，方差0.01）
+noisy_img = imnoise(img, 'gaussian', 0, 0.01);
+
+% 显示添加噪声后的图像
+figure;
+imshow(noisy_img);
+title('Image with Gaussian Noise');

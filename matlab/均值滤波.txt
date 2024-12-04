@@ -1,0 +1,22 @@
+% 读取图像
+image = imread('C:\Users\Lenovo\Desktop\椒盐噪声.jpg');
+
+% 判断图像是否为彩色图像（第三维大小为3表示彩色图像，有红、绿、蓝三个通道）
+if size(image, 3) == 3
+    image = rgb2gray(image);
+end
+
+% 创建3x3的均值滤波核
+h = ones(7, 7) / 49;
+
+% 使用imfilter函数进行均值滤波
+filtered_image = imfilter(image, h);
+
+% 显示原图像、带有椒盐噪声的图像以及滤波后的图像对比
+subplot(1, 2, 1);
+imshow(image);
+title('Original Image');
+
+subplot(1, 2, 2);
+imshow(filtered_image);
+title('Filtered Image');

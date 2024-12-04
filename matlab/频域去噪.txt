@@ -1,0 +1,45 @@
+% 读取图像
+image = imread('C:\Users\Lenovo\Desktop\jiaoyan.jpg');
+% 判断图像是否为彩色图像（第三维大小为3表示彩色图像，有红、绿、蓝三个通道）
+if size(image, 3) == 3
+    image = rgb2gray(image);
+end
+% 进行二维离散傅里叶变换
+F = fft2(image);
+% 将零频率分量移到频谱中心
+F_shifted = fftshift(F);
+% 获取图像的尺寸信息（行数和列数）
+[rows, cols] = size(image);
+% 计算频谱中心坐标
+crow = floor(rows/2) + 1;
+ccol = floor(cols/2) + 1;
+% 定义滤波器半径（用于控制保留的低频范围，可根据实际需求调整）
+radius = 40;
+% 创建与频谱大小相同的全零矩阵，用于构建滤波器
+H = zeros(rows, cols);
+% 循环构建理想低通滤波器（以频谱中心为圆心，radius为半径的圆形区域内为1，其余为0）
+for r = 1:rows
+    for c = 1:cols
+        distance = sqrt((r - crow)^2 + (c - ccol)^2);
+        if distance <= radius
+            H(r, c) = 1;
+        end
+    end
+end
+% 在频率域对频谱进行滤波，即将频谱与滤波器相乘
+F_filtered = F_shifted.* H;
+% 将零频率分量移回原来的位置（恢复到和fft2变换前对应）
+F_ishifted = ifftshift(F_filtered);
+% 进行二维离散傅里叶逆变换
+image_processed = ifft2(F_ishifted);
+% 取实部（因为经过逆变换后结果可能存在微小的虚部，通常取实部作为最终图像数据）
+image_processed = real(image_processed);
+
+% 显示原图像和处理后的图像对比
+subplot(1, 2, 1);
+imshow(image);
+title('Original Image');
+
+subplot(1, 2, 2);
+imshow(image_processed, []);
+title('Processed Image');

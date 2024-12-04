@@ -1,0 +1,19 @@
+% 读取图像
+image = imread('C:\Users\Lenovo\Desktop\高斯噪声.jpg');
+
+% 判断图像是否为彩色图像（第三维大小为3表示彩色图像，有红、绿、蓝三个通道）
+if size(image, 3) == 3
+    image = rgb2gray(image);
+end
+
+% 使用medfilt2函数进行中值滤波，设置滤波核大小为3x3
+filtered_image = medfilt2(image, [3, 3]);
+
+% 显示原图像和滤波后的图像
+subplot(1, 2, 1);
+imshow(image);
+title('Original Image');
+
+subplot(1, 2, 2);
+imshow(filtered_image);
+title('Filtered Image');

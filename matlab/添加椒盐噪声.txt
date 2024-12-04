@@ -1,0 +1,37 @@
+% 读取图像
+image = imread('C:\Users\Lenovo\Desktop\望远镜.jpg');
+
+% 判断图像是否为彩色图像（第三维大小为3表示彩色图像，有红、绿、蓝三个通道）
+if size(image, 3) == 3
+    image = rgb2gray(image);
+end
+
+% 获取图像尺寸
+[rows, cols] = size(image);
+
+% 设置椒盐噪声的密度（概率），这里设为0.05，表示有5%的像素点会变为噪声点
+noise_density = 0.05;
+
+% 生成与图像大小相同的均匀分布随机数矩阵，用于确定哪些像素点变为噪声点
+rand_matrix = rand(rows, cols);
+
+% 遍历图像的每个像素点，添加椒盐噪声
+for row = 1:rows
+    for col = 1:cols
+        % 根据噪声密度判断是否添加噪声
+        if rand_matrix(row, col) < noise_density / 2
+            % 添加黑色噪声点（将像素值设为0，对于uint8类型图像）
+            image(row, col) = 0;
+        elseif rand_matrix(row, col) < noise_density
+            % 添加白色噪声点（将像素值设为255，对于uint8类型图像）
+            image(row, col) = 255;
+        end
+    end
+end
+
+% 显示原图像和添加噪声后的图像对比
+
+
+subplot(1, 2, 2);
+imshow(image);
+title('Image with Salt and Pepper Noise');

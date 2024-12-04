@@ -1,0 +1,26 @@
+% 读取图片
+img = imread('C:\Users\Lenovo\Desktop\jiaoyan.jpg'); 
+
+% 转换为灰度图像
+grayImg = rgb2gray(img); 
+
+% 执行傅里叶变换
+F = fft2(double(grayImg));  % 对灰度图像进行二维傅里叶变换
+F_shifted = fftshift(F);     % 移动零频率分量到中心
+
+% 计算幅度谱
+magnitude = abs(F_shifted);       % 幅度谱
+logMagnitude = log(1 + magnitude); % 对数尺度
+
+% 显示原图和傅里叶变换结果
+figure;
+
+% 显示原图
+subplot(1, 2, 1);
+imshow(grayImg);
+title('Original Image');
+
+% 显示傅里叶变换的幅度谱
+subplot(1, 2, 2);
+imshow(logMagnitude, []);
+title('Magnitude Spectrum');
